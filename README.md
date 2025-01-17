@@ -108,9 +108,7 @@ Enclosures were designed with precision using laser cutting to house sensors and
 
 ---
 
-## Contact
-For further inquiries or collaboration opportunities, contact:
-**Department of Electronic and Telecommunication Engineering, University of Moratuwa**
+
 
 ---
 
