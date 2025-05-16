@@ -1,1 +1,61 @@
+// C++ code
+//
+const int buttonPinM2 =  9;  // the pin number for button 1
+const int buttonPinA2 = 10;
+const int buttonPinM1 = 11;  // the pin number for button 2
+const int buttonPinA1 = 12;
+const int pirPin = 17;
+const int mmwPin = 2;
+const int ssrPin1 = 15;
+const int ssrPin2 = 16;
+bool ssrState1 = false;
+bool ssrState2 = false;
 
+void setup()
+{
+  Serial.begin(9600);
+  pinMode(buttonPinM2, INPUT);
+  pinMode(buttonPinA2, INPUT);
+  pinMode(buttonPinM1, INPUT);
+  pinMode(buttonPinA1, INPUT);
+  pinMode(pirPin, INPUT);
+  pinMode(mmwPin, INPUT);
+  pinMode(ssrPin1, OUTPUT);
+  pinMode(ssrPin2, OUTPUT);
+  
+  // Initial state of SSR
+  digitalWrite(ssrPin1, LOW);
+  digitalWrite(ssrPin2, LOW);
+}
+
+void loop(){
+  // Read the state of the switches
+  bool switchA1State = digitalRead(buttonPinA1);
+  bool switchM1State = digitalRead(buttonPinM1);
+
+  if (switchA1State == HIGH) {
+    // If switch PB1 is active, check the sensors
+    bool pirState = digitalRead(pirPin);
+    bool mmWaveState = digitalRead(mmwPin);
+
+    if (pirState == HIGH) {
+      if (mmWaveState == HIGH) {
+        // If both sensors detect presence, activate SSR
+        ssrState1 = true;
+      } else {
+        // If mmWave sensor does not detect presence, deactivate SSR
+        ssrState1 = false;
+      }
+    }
+    
+  } else {
+    // If switch switchA1 is not active, control SSR with switch M1
+    ssrState1 = switchM1State;
+  }
+  bool switchM2State = digitalRead(buttonPinM2);
+  ssrState2 = switchM2State;
+
+  // Update SSR state
+  digitalWrite(ssrPin1, ssrState1 ? HIGH : LOW);
+  digitalWrite(ssrPin2, ssrState2 ? HIGH : LOW);
+}
